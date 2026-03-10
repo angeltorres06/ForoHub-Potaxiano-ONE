@@ -37,4 +37,16 @@ public class Topico {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "curso_id")
     private Curso curso;
+
+    public void actualizarDatos(DatosActualizarTopico datosActualizar) {
+        if (datosActualizar.titulo() != null) {
+            this.titulo = datosActualizar.titulo();
+        }
+        if (datosActualizar.mensaje() != null) {
+            this.mensaje = datosActualizar.mensaje();
+        }
+        if (datosActualizar.status() != null) {
+            this.status = datosActualizar.status();
+        }
+    }
 }

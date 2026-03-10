@@ -6,13 +6,20 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.List;
+
 @Table(name = "usuarios")
 @Entity(name = "Usuario")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class Usuario {
+public class Usuario implements UserDetails{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,4 +31,40 @@ public class Usuario {
     private String correoElectronico;
 
     private String contrasena;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        // Por ahora, todos tienen el mismo rol genérico
+        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+    }
+
+    @Override
+    public String getPassword() {
+        return contrasena; // Aquí retornamos la contraseña encriptada
+    }
+
+    @Override
+    public String getUsername() {
+        return correoElectronico; // Usaremos el correo como identificador
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }
